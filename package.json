@@ -1,0 +1,40 @@
+{
+  "name": "gelement",
+  "version": "1.0.0",
+  "description": "lightweight utility to create dom tree, with chainable methods.",
+  "main": "src/index.js",
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "ie 9"
+  ],
+  "scripts": {
+    "test": "test",
+    "build": "browserify src/index.js -o dist/index.min.js -s gelement -t [ babelify --presets [ @babel/preset-env ] ] -p tinyify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/lakca/gelement.git"
+  },
+  "jsdelivr": "dist/index.min.js",
+  "unpkg": "dist/index.min.js",
+  "keywords": [
+    "element",
+    "dom",
+    "chainable",
+    "semantic"
+  ],
+  "author": "lakca",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lakca/gelement/issues"
+  },
+  "homepage": "https://github.com/lakca/gelement#readme",
+  "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "babelify": "^10.0.0",
+    "browserify": "^17.0.0",
+    "tinyify": "^3.0.0"
+  }
+}
