@@ -350,6 +350,7 @@ class Gelement extends Gbase {
    */
   down(tag, type) {
     if (Array.isArray(tag)) {
+      if (!tag.length) return this
       const down = this.down(tag[0])
       tag.slice(1).reduce((p, c) => p.next(c), down)
       return down
@@ -366,6 +367,11 @@ class Gelement extends Gbase {
     } else {
       return super.down()
     }
+  }
+  empty() {
+    this.el.innerHTML = ''
+    const startIndex = this.chain.indexOf(this) + 1
+    return this
   }
   /**
    * Return `outerHTML`
