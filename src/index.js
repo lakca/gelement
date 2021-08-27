@@ -168,6 +168,13 @@ class Gbase {
   get head() {
     return this.chain[0]
   }
+  get description() {
+    return `
+    parentGelement: ${this.parentGelement?._key || ''}
+    downGelement: ${this.downGelement?._key || ''}
+    nextGelement: ${this.nextGelement?._key || ''}
+    `
+  }
 }
 
 class Gtext extends Gbase {
@@ -381,12 +388,14 @@ class Gelement extends Gbase {
       tag.slice(1).reduce((p, c) => p.next(c), down)
       return down
     } else if (tag instanceof Gbase) {
-      const down = this.downGelement = tag
+      const down = tag
+      if (this.downGelement) down.nextGelement = this.downGelement
+      this.downGelement = down
+      down.parentGelement = this
+      down.chain = this.chain
       down.level = this.level + 1
       this.chain.splice(this.chain.indexOf(this) + 1, 0, down)
       this.el.prepend(down.el)
-      down.chain = this.chain
-      down.parentGelement = this
       return down
     } else if (tag) {
       return this.down(gc(tag, type))

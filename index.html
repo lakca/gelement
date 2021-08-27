@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./dist/index.min.js"></script>
+</head>
+<body>
+  <button onclick="next()">Next</button>
+  <div id="t"></div>
+</body>
+<script>
+  const g = gelement
+  const paint = document.getElementById('t')
+
+!(function() {
+  const last /* li#last */ = g('ul')
+  .down('li').text('hello')
+  .next('li')
+    .down('a').attr('href', 'https://github.com/').text('Github')
+    .next(' Location', 'text')
+    .down()
+  .next('li').key('li')
+    .down('button').text('Click').on('click', console.log).key('button')
+    .next('input').if(false).attr('type', 'checkbox').attr('checked').key('checkbox')
+    .down()
+  .next(new Array(3).fill().map(() => g('li')))
+    .down(new Array(3).fill().map(() => g('p').down('input').attr('type', 'radio').start))
+    .down()
+  .next('li').attr('id', 'last')
+
+const ul = last.start
+
+paint.appendChild(ul.el)
+
+last.node('button').el.click()
+})
+// ();
+
+!(function() {
+  const showInput = false
+
+  const last /* li#last */ = g('ul')
+    .down('li').text('hello')
+    .next('li')
+      .down('a').attr('href', 'https://www.github.com').text('Github').text(' Location')
+      .down()
+    .next('li')
+      .down('button').text('Click').on('click', console.log).key('button')
+      .next('input').if(showInput).attr('readonly').attr('value', 'hwlloe')
+      .down([].map(e => g(e).text('hello')))
+      .down()
+      .down()
+    .next('li').id('last')
+
+  const ul = last.start
+
+  last.node('button').el.click()
+
+})
+// ();
+
+function *demo() {
+  yield  console.clear()
+
+  const x = g('ul').down('li').key('A li').text('li A').next('li').key('B li').text('li B')
+
+  const log = k => console.log(`${k}: ${x.node(k).description}`)
+  window.x = x;
+  paint.innerHTML = x.start
+  log('A li')
+  yield
+  x.node('A li').next('li').key('C li').text('li C')
+  paint.innerHTML = x.start
+  console.log('add C')
+  log('A li')
+  log('C li')
+  log('B li')
+  yield
+  x.node('A li').down('span').key('D span').text('span D')
+  paint.innerHTML = x.start
+  console.log('add D')
+  log('A li')
+  log('D span')
+  log('C li')
+  log('B li')
+  yield
+  x.node('D span').down('span').key('E span').text('span E')
+  paint.innerHTML = x.start
+  console.log('add E')
+  log('A li')
+  log('D span')
+  log('E span')
+  log('C li')
+  log('B li')
+  yield
+  x.node('D span').next('span').key('F span').text('span F')
+  paint.innerHTML = x.start
+  console.log('add F')
+  log('A li')
+  log('D span')
+  log('E span')
+  log('F span')
+  log('C li')
+  log('B li')
+  yield
+  x.node('D span').down('span').key('G span').text('span G')
+  paint.innerHTML = x.start
+  console.log('add G')
+  log('A li')
+  log('D span')
+  log('G span')
+  log('E span')
+  log('F span')
+  log('C li')
+  log('B li')
+}
+
+a = demo()
+a.next()
+function next() {
+  a.next()
+}
+</script>
+</html>
