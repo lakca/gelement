@@ -207,21 +207,38 @@ class Gelement extends Gbase {
   /**
    * Creates an instance of Gelement.
    *
+   * - `Gelement('input')`: tag
+   * - `Gelement('input#id')`: tag with id trait
+   * - `Gelement('input@submit')`: tag with domain specific trait
+   * - `Gelement('button@like:link')`: tag with dataset, you'd better only add trait dataset to tag info.
+   *
    * @param {T} tag
    * @memberof Gelement
    */
   constructor(tagInfo, chain) {
     super(chain)
-    const [tag, type] = tagInfo.split('@')
+    const [tagWithID, meta] = tagInfo.split('@')
+    const [tag, id] = tagWithID.split('#')
     /** @readonly */
     this.tag = tag
     /** @type {HTMLElementTagNameMap[T]} */
     this.el = document.createElement(tag)
     /** @type {{[x: string]: function}} */
     this.events = {}
-    if (type) {
-      if (tag === 'input') {
-        this.attr('type', type)
+    // handle id
+    if (id) this.id(id)
+    // handle meta info
+    if (meta) {
+      const index = meta.indexOf(':')
+      if (!~index) {
+        switch (tag) {
+          case 'input':
+            this.attr('type', meta)
+            break
+          default:
+        }
+      } else {
+        this.data(meta.slice(0, index), meta.slice(index + 1))
       }
     }
   }
