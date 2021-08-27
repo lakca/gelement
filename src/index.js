@@ -51,10 +51,22 @@ class Gbase {
   constructor(chain = []) {
     this.chain = chain
     this.chain.push(this)
-    /** Should mount element or not */
-    this.flag = true
-    /** tree level */
+    /**
+     * The gelement level in the tree
+     * @type {number}
+     */
     this.level = 0
+    /**
+     * Should mount element or not
+     * @type {boolean}
+     */
+    this._shouldMount = true
+    /**
+     * Indicate previous `.down(...)` call was missed:
+     * if `.down(...)` was called with an empty array, the down is in missed state till `.down()` or `.up()` will be called.
+     * @type {boolean}
+     */
+    this._downMissing = false
   }
   /**
    * Mount/Unmount element from parent node, and decide execute/skip the methods of modifying itself afterwards.
@@ -63,8 +75,8 @@ class Gbase {
    * @memberof Gbase
    */
   if(flag) {
-    this.flag = flag
-    if (!this.flag) {
+    this._shouldMount = flag
+    if (!this._shouldMount) {
       removeElement(this.el)
     } else {
       //  TODO:
@@ -135,7 +147,15 @@ class Gbase {
     }
   }
   down() {
-    return this.parentGelement
+    return this.up()
+  }
+  up() {
+    if (this._downMissing) {
+      this._downMissing = false
+      return this
+    } else {
+      return this.parentGelement
+    }
   }
   /**
    * Return chain start end.
@@ -353,7 +373,10 @@ class Gelement extends Gbase {
    */
   down(tag, type) {
     if (Array.isArray(tag)) {
-      if (!tag.length) return this
+      if (!tag.length) {
+        this._downMissing = true
+        return this
+      }
       const down = this.down(tag[0])
       tag.slice(1).reduce((p, c) => p.next(c), down)
       return down
@@ -374,6 +397,7 @@ class Gelement extends Gbase {
   empty() {
     this.el.innerHTML = ''
     const startIndex = this.chain.indexOf(this) + 1
+    // TODO:
     return this
   }
   /**
@@ -396,7 +420,7 @@ function decorateClassMethod(cls, method, decorator) {
 function decorateOnFlag(target, key, descriptor) {
   const origin = descriptor.value
   descriptor.value = function(...args) {
-    if (this.flag) return origin.call(this, ...args)
+    if (this._shouldMount) return origin.call(this, ...args)
     return this
   }
   return descriptor
