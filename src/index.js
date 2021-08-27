@@ -41,20 +41,6 @@ function insertAfter(node, prevNode) {
   }
 }
 
-function parseTagInfo(tagInfo) {
-  const reg = /(@|#)([^@#]*)/g
-  const meta = {}
-  let r = reg.exec(tagInfo)
-  const tag = r ? tagInfo.slice(0, r.index) : tagInfo
-  if (r) {
-    do {
-      if (meta[r[1]]) meta[r[1]].push(r[2])
-      else meta[r[1]] = [r[2]]
-    } while (r = reg.exec(tagInfo))
-  }
-  return { tag, meta }
-}
-
 class Gbase {
   /**
    * Creates an instance of Gelement.
