@@ -10,7 +10,8 @@
   ],
   "scripts": {
     "test": "test",
-    "build": "browserify src/index.js -o dist/index.min.js -s gelement -t [ babelify --presets [ @babel/preset-env ] ] -p tinyify"
+    "build": "browserify src/index.js -o dist/index.min.js -s gelement -t [ babelify --presets [ @babel/preset-env ] ] -p tinyify",
+    "debug-build": "browserify src/index.js -o dist/index.min.js -s gelement"
   },
   "repository": {
     "type": "git",
